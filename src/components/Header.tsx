@@ -31,6 +31,7 @@ const Header: React.FC = () => {
           placeholder="JavaScript"
           value={searchValue}
           onChange={onChangeSearchValue}
+          onKeyDown={(e) => e.key === "Enter" && getBooks()}
         />
         <svg
           onClick={getBooks}

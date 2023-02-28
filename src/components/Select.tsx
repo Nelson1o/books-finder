@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppDispatch } from "../store/hooks";
-import { setParamsSearch } from "../store/slices/bookSlice";
+import { fetchBooks, setParamsSearch } from "../store/slices/bookSlice";
 
 type TSelect = {
   title: string;
@@ -13,6 +13,7 @@ const Select: React.FC<TSelect> = React.memo(({ title, name, items }) => {
 
   const onChangeSelectValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setParamsSearch([e.target.value, e.target.name]));
+    dispatch(fetchBooks());
   };
 
   return (
