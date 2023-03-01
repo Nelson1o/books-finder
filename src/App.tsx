@@ -1,17 +1,19 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import Loader from "./components/Loader";
-import { useAppSelector } from "./store/hooks";
+import FullBook from "./components/FullBook";
+
 import "./App.scss";
 
 const App: React.FC = () => {
-  const { status } = useAppSelector((state) => state.books);
-
   return (
     <div className="container">
       <Header />
-      {status === "loading" ? <Loader /> : <Main />}
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/book/:id" element={<FullBook />} />
+      </Routes>
     </div>
   );
 };

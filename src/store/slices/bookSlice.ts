@@ -33,6 +33,7 @@ interface IBookSlice {
   status: Status;
   amount: number;
   books: TBooksItems[];
+  choosenBooks: TBooksItems | undefined;
 }
 
 const initialState: IBookSlice = {
@@ -43,6 +44,7 @@ const initialState: IBookSlice = {
   status: Status.SUCCESS,
   amount: 0,
   books: [],
+  choosenBooks: undefined,
 };
 
 type TFetchBooks = {
@@ -79,6 +81,9 @@ export const bookSlice = createSlice({
         state.sortBy = value;
       }
     },
+    findBookOnId: (state, action: PayloadAction<string | undefined>) => {
+      state.choosenBooks = state.books.find((book) => book.id === action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBooks.pending, (state, action) => {
@@ -96,5 +101,5 @@ export const bookSlice = createSlice({
   },
 });
 
-export const { setSearchValue, setParamsSearch } = bookSlice.actions;
+export const { setSearchValue, setParamsSearch, findBookOnId } = bookSlice.actions;
 export default bookSlice.reducer;

@@ -177,6 +177,62 @@
   }
 }
 
+.book-item {
+  display: flex;
+  width: 100%;
+
+  &__img {
+    width: 45%;
+    height: 520px;
+    background-color: rgb(245, 245, 245);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 300px;
+      height: 420px;
+      display: block;
+      margin: 0px auto;
+      box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__descr {
+    padding: 50px 20px 50px 50px;
+    width: 55%;
+    position: relative;
+
+    &-categories {
+      font-size: 18px;
+      margin-bottom: 24px;
+    }
+
+    &-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    &-autors {
+      font-size: 20px;
+      font-weight: 200;
+      text-decoration: underline;
+      color: #c1c1c1;
+      margin-bottom: 20px;
+    }
+
+    &-close {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: 15px;
+      right: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
 // ============================================================
 .lds-spinner {
   display: inline-block;
