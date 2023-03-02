@@ -2,39 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
-
-enum Status {
-  LOADING = "loading",
-  SUCCESS = "success",
-  ERROR = "error",
-}
-
-type TImageLinks = {
-  smallThumbnail: string;
-};
-
-type TVolumeInfo = {
-  imageLinks: TImageLinks;
-  categories: string;
-  title: string;
-  authors: string;
-};
-
-type TBooksItems = {
-  id: string;
-  volumeInfo: TVolumeInfo;
-};
-
-interface IBookSlice {
-  searchValue: string;
-  categoryType: string;
-  sortBy: string;
-  startIndex: number;
-  status: Status;
-  amount: number;
-  books: TBooksItems[];
-  choosenBooks: TBooksItems | undefined;
-}
+import { IBookSlice, Status, TFetchBooks } from "../../types/types";
 
 const initialState: IBookSlice = {
   searchValue: "",
@@ -47,15 +15,21 @@ const initialState: IBookSlice = {
   choosenBooks: undefined,
 };
 
-type TFetchBooks = {
-  totalItems: number;
-  items: TBooksItems[];
-};
-
-export const key = "AIzaSyDsIZw3kW5_2_wqSSWSqM1rD9abyj-GPOI";
+const key = "AIzaSyDsIZw3kW5_2_wqSSWSqM1rD9abyj-GPOI";
 
 export const fetchBooks = createAsyncThunk<TFetchBooks, void, { state: RootState }>(
   "book/fetchBooks",
+  async (_, { getState }) => {
+    const state = getState();
+    const { data } = await axios.get<TFetchBooks>(
+      `https://www.googleapis.com/books/v1/volumes?q=${state.books.searchValue}&orderBy=${state.books.sortBy}&printType=${state.books.categoryType}&maxResults=20&startIndex=0&key=${key}`
+    );
+    return data;
+  }
+);
+
+export const fetchMoreBooks = createAsyncThunk<TFetchBooks, void, { state: RootState }>(
+  "book/fetchMoreBooks",
   async (_, { getState }) => {
     const state = getState();
     const { data } = await axios.get<TFetchBooks>(
@@ -84,6 +58,13 @@ export const bookSlice = createSlice({
     findBookOnId: (state, action: PayloadAction<string | undefined>) => {
       state.choosenBooks = state.books.find((book) => book.id === action.payload);
     },
+    setIndex: (state, action: PayloadAction<boolean>) => {
+      if (action.payload) {
+        state.startIndex += 20;
+      } else {
+        state.startIndex = 0;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBooks.pending, (state, action) => {
@@ -98,8 +79,20 @@ export const bookSlice = createSlice({
       state.status = Status.ERROR;
       state.books = [];
     });
+    builder.addCase(fetchMoreBooks.pending, (state, action) => {
+      state.status = Status.LOADING;
+    });
+    builder.addCase(fetchMoreBooks.fulfilled, (state, action) => {
+      state.status = Status.SUCCESS;
+      state.amount = action.payload.totalItems;
+      state.books = [...state.books, ...action.payload.items];
+    });
+    builder.addCase(fetchMoreBooks.rejected, (state, action) => {
+      state.status = Status.ERROR;
+      state.books = [];
+    });
   },
 });
 
-export const { setSearchValue, setParamsSearch, findBookOnId } = bookSlice.actions;
+export const { setSearchValue, setParamsSearch, findBookOnId, setIndex } = bookSlice.actions;
 export default bookSlice.reducer;

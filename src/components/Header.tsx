@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchBooks, setSearchValue } from "../store/slices/bookSlice";
+import { fetchBooks, setIndex, setSearchValue } from "../store/slices/bookSlice";
 import Select from "./Select";
 
 const categories = ["all", "art", "biography", "computers", "history", "medical", "poetry"];
@@ -15,6 +15,7 @@ const Header: React.FC = () => {
   };
 
   const getBooks = () => {
+    dispatch(setIndex(false));
     dispatch(fetchBooks());
   };
 

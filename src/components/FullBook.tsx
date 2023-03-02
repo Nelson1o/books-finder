@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { findBookOnId } from "../store/slices/bookSlice";
 import Loader from "./Loader";
 
-const FullBook = () => {
+const FullBook: React.FC = () => {
   const dispatch = useAppDispatch();
   const { choosenBooks } = useAppSelector((state) => state.books);
 
@@ -27,6 +27,7 @@ const FullBook = () => {
         <div className="book-item__descr-categories">{choosenBooks?.volumeInfo.categories}</div>
         <div className="book-item__descr-title">{choosenBooks?.volumeInfo.title}</div>
         <div className="book-item__descr-autors">{choosenBooks?.volumeInfo.authors}</div>
+        <div className="book-item__descr-descr">{choosenBooks?.volumeInfo.description}</div>
         <Link to={"/"}>
           <svg
             className="book-item__descr-close"

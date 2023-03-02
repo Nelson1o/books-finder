@@ -1,10 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchMoreBooks, setIndex } from "../store/slices/bookSlice";
 import Loader from "./Loader";
 
 const Main: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { amount, books, status } = useAppSelector((state) => state.books);
+
+  const getMoreBooks = () => {
+    dispatch(setIndex(true));
+    dispatch(fetchMoreBooks());
+  };
 
   return (
     <>
@@ -12,7 +19,7 @@ const Main: React.FC = () => {
         <Loader />
       ) : (
         <>
-          {amount > 0 && <div className="found">Found {amount} books</div>}
+          {amount > 0 && <div className="found">Found {amount} results</div>}
           {books.length > 0 && (
             <div className="card">
               {books.map((book) => (
@@ -29,7 +36,7 @@ const Main: React.FC = () => {
           )}
           {books.length > 0 && (
             <div className="find">
-              <button className="find__btn" onClick={() => console.log("123")}>
+              <button className="find__btn" onClick={getMoreBooks}>
                 Find more
               </button>
             </div>
