@@ -2,11 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchMoreBooks, setIndex } from "../store/slices/bookSlice";
+import { filterBooks } from "../utils/filterBooks";
 import Loader from "./Loader";
 
 const Main: React.FC = () => {
   const dispatch = useAppDispatch();
   const { amount, books, status } = useAppSelector((state) => state.books);
+
+  const fillteredBooks = filterBooks(books);
 
   const getMoreBooks = () => {
     dispatch(setIndex(true));
@@ -22,7 +25,7 @@ const Main: React.FC = () => {
           {amount > 0 && <div className="found">Found {amount} results</div>}
           {books.length > 0 && (
             <div className="card">
-              {books.map((book) => (
+              {fillteredBooks.map((book) => (
                 <div className="card-item" key={book.id}>
                   <Link to={`/book/${book.id}`}>
                     <img src={book.volumeInfo.imageLinks?.smallThumbnail} alt="bookImg" />
