@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchBooks, setIndex, setSearchValue } from "../store/slices/bookSlice";
 import Select from "./Select";
@@ -9,12 +10,17 @@ const sorts = ["relevance", "newest"];
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const { searchValue } = useAppSelector((state) => state.books);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const onChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchValue(e.target.value));
   };
 
   const getBooks = () => {
+    if (location.pathname !== "/") {
+      navigate("/");
+    }
     dispatch(setIndex(false));
     dispatch(fetchBooks());
   };

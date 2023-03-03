@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
 }
 
 .container {
@@ -219,8 +220,7 @@
     }
 
     &-autors {
-      font-size: 20px;
-      font-weight: 200;
+      font-size: 18px;
       text-decoration: underline;
       color: #c1c1c1;
       margin-bottom: 20px;
