@@ -22,6 +22,7 @@
     margin-bottom: 24px;
     color: white;
     font-weight: 700;
+    cursor: pointer;
   }
 
   &-search {
@@ -236,6 +237,7 @@
       text-align: justify;
       padding: 15px;
       border-radius: 9px;
+      resize: vertical;
 
       &::-webkit-scrollbar {
         width: 12px;
